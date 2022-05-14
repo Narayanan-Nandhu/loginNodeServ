@@ -1,9 +1,8 @@
 {
   "name": "nodeloginserv",
-  "version": "1.0.0",
+  "version": "1.0.0-test1",
   "description": "Common login node service layer to handle authentication and logging In",
   "main": ".build/index.js",
-  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "transpile": "tsc --watch",
