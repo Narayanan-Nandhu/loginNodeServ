@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+     "jsx": "react",
+     "moduleResolution": "node",
+     "esModuleInterop": true,
+     "target": "es6",
+     "module": "commonjs",
+     "lib": [
+       "dom",
+       "esnext"
+     ],
+     "strict": true,
+     "sourceMap": true,
+     "allowJs": true,
+     "incremental": true,
+    },
+  
+    "include": [
+      "./"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
+  
