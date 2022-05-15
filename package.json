@@ -1,14 +1,15 @@
 {
   "name": "nodeloginserv",
-  "version": "1.0.0-test1",
+  "version": "1.2.1",
   "description": "Common login node service layer to handle authentication and logging In",
-  "main": ".build/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "transpile": "tsc --watch",
-    "start": "nodemon node index.js",
+    "start": "nodemon node dist/index.js",
     "dev": "npm run start",
-    "clean": "del ./*.js, ./*.js.map" 
+    "clean": "del ./*.js, ./*.js.map"
   },
   "keywords": [
     "Login",
