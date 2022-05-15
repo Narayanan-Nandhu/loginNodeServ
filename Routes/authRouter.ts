@@ -11,12 +11,14 @@ AuthenticationRouter.get('/oauth2/redirect/google', passport.authenticate('googl
 })
 
 AuthenticationRouter.get('/api/current_user', (req, res) => {
-    console.log('hello...', req.user);
-    res.send(req?.user)
+    if(req?.user) {
+       res.send(req?.user);
+    } else {
+        res.sendStatus(200).redirect('/failure')
+    }
 });
 
 AuthenticationRouter.get('/api/logout', (req, res) => {
-    console.log("Logout CAll ", Object.keys(req)) 
     req.logOut();
     res.redirect('/home')
 })

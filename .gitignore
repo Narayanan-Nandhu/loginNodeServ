@@ -2,6 +2,9 @@ node_modules
 *.js
 *.js.map
 tsconfig.tsbuildinfo
-.build
+
 
 .env
+
+.build
+dist

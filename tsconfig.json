@@ -13,13 +13,14 @@
      "sourceMap": true,
      "allowJs": true,
      "incremental": true,
+     "outDir": "dist"
     },
   
     "include": [
       "./"
     ],
     "exclude": [
-      "node_modules"
+      "node_modules",
     ]
   }
   
