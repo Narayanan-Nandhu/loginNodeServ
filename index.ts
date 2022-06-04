@@ -29,8 +29,8 @@ export const authenticateServ = (app : Application) => {
     googleAuthenticationService(passport);
     localAuthenticationPassportServ(passport);
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}))
-
+    app.use(bodyParser.urlencoded({extended: true}));
+    
     app.use(session({
         secret: randomKey,
         resave: false,
