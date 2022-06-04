@@ -8,3 +8,6 @@ tsconfig.tsbuildinfo
 
 .build
 dist
+
+
+coverage

@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
      "jsx": "react",
+     "typeRoots": [
+       "node_modules/@types"
+     ],
      "moduleResolution": "node",
      "esModuleInterop": true,
      "target": "es6",
@@ -13,14 +16,16 @@
      "sourceMap": true,
      "allowJs": true,
      "incremental": true,
-     "outDir": "dist"
+     "pretty": true,
+     "outDir": "./dist"
     },
-  
+
     "include": [
-      "./"
-    ],
-    "exclude": [
-      "node_modules",
-    ]
+      "model/*",
+      "passport/*",
+      "utils/*",
+      "routes/*",
+      "./*"
+, "tests/unit/utils/index.test.ts"    ]
   }
   

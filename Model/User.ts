@@ -5,6 +5,9 @@ const UserSchema =  new Schema({
         type: 'String',
         required: true,
     },
+    password: {
+        type: 'String',
+    },
     googleId: {
         type: 'String'
     },
