@@ -18,35 +18,35 @@ const ENV = process.env.NODE_ENV;
 const USERDB = ENV === CONSTANTS.TESTPACKAGE ? CONSTANTS.TESTPACKAGE_USER : CONSTANTS.PRODUCTION_USER;
 
 type APP_CONFIG = {
-    PASSPORT_LOCAL_AUTHENTICATION: Boolean,
-    GOOGLE_AUTHENTICATION: Boolean,
-    ROUTES_ENDPOINTS: {
-        PASSPORT_LOCAL: {
-            SIGN_UP: String,
-            SIGN_IN: String,
-            SIGN_IN_FAILED: String,
-            SIGN_UP_SUCCESS: String,
-            SIGN_UP_FAILED: String,
-            LOGOUT: String,
-            GET_USER: String,
-            LOGOUT_REDIRECT_URI: String
+    PASSPORT_LOCAL_AUTHENTICATION?: Boolean,
+    GOOGLE_AUTHENTICATION?: Boolean,
+    ROUTES_ENDPOINTS?: {
+        PASSPORT_LOCAL?: {
+            SIGN_UP?: String,
+            SIGN_IN?: String,
+            SIGN_IN_FAILED?: String,
+            SIGN_UP_SUCCESS?: String,
+            SIGN_UP_FAILED?: String,
+            LOGOUT?: String,
+            GET_USER?: String,
+            LOGOUT_REDIRECT_URI?: String
         },
-        GOOGLE_AUTH: {
-            SIGNUP_URI: String,
-            CALLBACK_URI: String,
-            GAUTH_SUCCESS: String,
-            LOGOUT:String,
-            GET_USER: String,
-            LOGOUT_REDIRECT_URI: String
+        GOOGLE_AUTH?: {
+            SIGNUP_URI?: String,
+            CALLBACK_URI?: String,
+            GAUTH_SUCCESS?: String,
+            LOGOUT?: String,
+            GET_USER?: String,
+            LOGOUT_REDIRECT_URI?: String
         }
     }
 }
 
 let DEFAULT_APP_CONFIG = { ...CONSTANTS.DEFAULT_APP_CONFIG }
 
-export const authenticateServ = (app: Application, CUSTOM_APP_CONFIG: APP_CONFIG  ) => {
+export const authenticateServ = (app: Application, CUSTOM_APP_CONFIG?: APP_CONFIG  ) => {
 
-    const {PASSPORT_LOCAL_AUTHENTICATION, GOOGLE_AUTHENTICATION } = CUSTOM_APP_CONFIG;
+    const {PASSPORT_LOCAL_AUTHENTICATION, GOOGLE_AUTHENTICATION } = CUSTOM_APP_CONFIG || DEFAULT_APP_CONFIG;
     app.set('APP_CONFIG', { ...DEFAULT_APP_CONFIG, ...CUSTOM_APP_CONFIG });
 
     mongoose.connect(process.env.MONGO_URI + `/${USERDB}`).then(() => {
@@ -76,9 +76,8 @@ export const authenticateServ = (app: Application, CUSTOM_APP_CONFIG: APP_CONFIG
     app.use(LocalAuthRouter)
 }
 
-console.log("NODE_ENV", process.env.NODE_ENV)
 if (process.env.NODE_ENV === CONSTANTS.TESTPACKAGE) {
-    authenticateServ(app, CONSTANTS.DEFAULT_APP_CONFIG)
+    authenticateServ(app)
     app.listen(PORT, () => {
         console.info("[%s] Login Node Service started listening to the port [%d]", process.env.NODE_ENV, PORT)
     })

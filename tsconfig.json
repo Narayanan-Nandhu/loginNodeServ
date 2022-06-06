@@ -14,7 +14,7 @@
      ],
      "strict": true,
      "sourceMap": true,
-     "allowJs": true,
+     "declaration": true,
      "incremental": true,
      "pretty": true,
      "outDir": "./dist"
@@ -25,7 +25,7 @@
       "passport/*",
       "utils/*",
       "routes/*",
-      "./*"
-, "tests/unit/utils/index.test.ts"    ]
+      "test/*", 
+    ]
   }
   
