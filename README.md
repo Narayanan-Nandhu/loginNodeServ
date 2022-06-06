@@ -1,3 +1,6 @@
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Narayanan-Nandhu/loginNodeServ/issues)
+
+
 # loginNodeServ
 
 ### Description 
@@ -30,7 +33,7 @@ GOOGLE_CLIENT_SECRET=*******************
 MONGO_URI=mongodb://localhost:27017
 NODE_ENV=development
 PORT=8000
-PASSWORD_ENCRYPTION_KEY=******************
+PASSWORD_PASSWORD_ENCRYPTION_KEY=******************
 ```
 
 Once it is configured, you can import the `authenticateServ` from the nodeloginserv

@@ -11,7 +11,7 @@ const alphaNumericString = (length: Number) => {
 }
 
 const algorithm = CONSTANTS.CRYPTO_ALGORITHM;
-const passKeyValue = process.env.ENCRYPTION_KEY || 'keyboardCat';
+const passKeyValue = process.env.PASSWORD_ENCRYPTION_KEY || 'keyboardCat';
 
 
 const encrypt = (data: string) => {

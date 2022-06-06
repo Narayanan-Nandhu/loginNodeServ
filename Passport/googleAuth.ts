@@ -1,11 +1,10 @@
 import { PassportStatic } from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
-import { User } from "../Model";
+import { User } from '../Model'
 
 const googleAuthenticationService = (passport: PassportStatic) => {
 
     passport.serializeUser((user: any, done) => {
-        console.log('User...> Serialize USer', user)
         done(null, user.id);
     })
 
@@ -13,7 +12,6 @@ const googleAuthenticationService = (passport: PassportStatic) => {
 
         try {
             const user = await User.findById(id);
-            console.log("User...> DeserializeUser", user);
             done(null, user)
         } catch (err) {
             done(null);
@@ -30,8 +28,8 @@ const googleAuthenticationService = (passport: PassportStatic) => {
         callbackURL: `/oauth2/redirect/google`
     }, async (accessToken, refreshToken, profile: any, done) => {
 
-        console.log("AccessToken", refreshToken, profile, accessToken)
-        console.log("AccessToken", profile.id, '====>')
+        console.info("AccessToken", refreshToken, profile, accessToken)
+        console.info("AccessToken", profile.id, '====>')
         try {
             const existingUser = await User.findOne({ googleId: profile.id })
             if (existingUser) {
@@ -47,7 +45,7 @@ const googleAuthenticationService = (passport: PassportStatic) => {
                 done(null, newUser)
             }
         } catch (err: any) {
-            console.warn("Hey we got a error at Passport : Google Auth Strategy");
+            console.error("Hey we got a error at Passport : Google Auth Strategy");
             return done(err);
         }
     }))

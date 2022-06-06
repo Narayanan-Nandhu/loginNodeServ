@@ -2,7 +2,7 @@ import express, { Application } from "express";
 import mongoose from "mongoose";
 import passport from "passport";
 import googleAuthenticationService from './passport/googleAuth';
-import {AuthenticationRouter, GoogleAuthRouter, LocalAuthRouter} from './routes/authRouter';
+import { AuthenticationRouter, GoogleAuthRouter, LocalAuthRouter, initializeRoutes } from './routes/authRouter';
 import session from 'express-session';
 import Utils from './utils/index'
 import CONSTANTS from "./utils/constants";
@@ -15,22 +15,53 @@ const app = express()
 const PORT = process.env.PORT || 5001
 let randomKey = Utils.alphaNumericString(13);
 const ENV = process.env.NODE_ENV;
-const USERDB =  ENV === CONSTANTS.TESTPACKAGE ? CONSTANTS.TESTPACKAGE_USER : CONSTANTS.PRODUCTION_USER;
+const USERDB = ENV === CONSTANTS.TESTPACKAGE ? CONSTANTS.TESTPACKAGE_USER : CONSTANTS.PRODUCTION_USER;
 
-export const authenticateServ = (app : Application) => {
+type APP_CONFIG = {
+    PASSPORT_LOCAL_AUTHENTICATION: Boolean,
+    GOOGLE_AUTHENTICATION: Boolean,
+    ROUTES_ENDPOINTS: {
+        PASSPORT_LOCAL: {
+            SIGN_UP: String,
+            SIGN_IN: String,
+            SIGN_IN_FAILED: String,
+            SIGN_UP_SUCCESS: String,
+            SIGN_UP_FAILED: String,
+            LOGOUT: String,
+            GET_USER: String,
+            LOGOUT_REDIRECT_URI: String
+        },
+        GOOGLE_AUTH: {
+            SIGNUP_URI: String,
+            CALLBACK_URI: String,
+            GAUTH_SUCCESS: String,
+            LOGOUT:String,
+            GET_USER: String,
+            LOGOUT_REDIRECT_URI: String
+        }
+    }
+}
 
-    mongoose.connect(process.env.MONGO_URI+ `/${USERDB}`).then(() => {
+let DEFAULT_APP_CONFIG = { ...CONSTANTS.DEFAULT_APP_CONFIG }
+
+export const authenticateServ = (app: Application, CUSTOM_APP_CONFIG: APP_CONFIG  ) => {
+
+    const {PASSPORT_LOCAL_AUTHENTICATION, GOOGLE_AUTHENTICATION } = CUSTOM_APP_CONFIG;
+    app.set('APP_CONFIG', { ...DEFAULT_APP_CONFIG, ...CUSTOM_APP_CONFIG });
+
+    mongoose.connect(process.env.MONGO_URI + `/${USERDB}`).then(() => {
         console.info('Connected to Mongo DB');
     }).catch((error) => {
         console.error("Oh no connection error");
         console.error(error);
     })
 
-    googleAuthenticationService(passport);
-    localAuthenticationPassportServ(passport);
+    initializeRoutes(app);
+    GOOGLE_AUTHENTICATION && googleAuthenticationService(passport);
+    PASSPORT_LOCAL_AUTHENTICATION && localAuthenticationPassportServ(passport);
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
-    
+    app.use(bodyParser.urlencoded({ extended: true }));
+
     app.use(session({
         secret: randomKey,
         resave: false,
@@ -39,14 +70,15 @@ export const authenticateServ = (app : Application) => {
     }))
 
     app.use(passport.initialize());
-    app.use(passport.session())
-    app.use(GoogleAuthRouter)
-    app.use(AuthenticationRouter)
+    app.use(passport.session());
+    GOOGLE_AUTHENTICATION && app.use(GoogleAuthRouter)
+    PASSPORT_LOCAL_AUTHENTICATION && app.use(AuthenticationRouter)
     app.use(LocalAuthRouter)
 }
 
+console.log("NODE_ENV", process.env.NODE_ENV)
 if (process.env.NODE_ENV === CONSTANTS.TESTPACKAGE) {
-    authenticateServ(app)
+    authenticateServ(app, CONSTANTS.DEFAULT_APP_CONFIG)
     app.listen(PORT, () => {
         console.info("[%s] Login Node Service started listening to the port [%d]", process.env.NODE_ENV, PORT)
     })

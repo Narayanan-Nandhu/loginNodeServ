@@ -1,6 +1,6 @@
 {
   "name": "loginnodeserv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Login node module service layer to handle Passport authentication",
   "main": "dist",
   "types": "dist/index.d.ts",
@@ -8,13 +8,23 @@
     "dist"
   ],
   "scripts": {
-    "test": "jest --coverage",
+    "test": "cross-env NODE_ENV=\"test\" tsc && jest --coverage",
     "test:watch": "jest --watch",
     "transpile": "tsc --watch",
     "start": "nodemon node dist/index.js",
-    "dev": "cross-env NODE_ENV=test_package PORT=5001 npm run start",
+    "dev": "cross-env NODE_ENV=test PORT=5001 npm run start",
     "clean": "del ./*.js, ./*.js.map",
-    "prepare": "tsc && \"npm run test\""
+    "prepublishOnly": "\"npm run test\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm test"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Narayanan-Nandhu/loginNodeServ"
   },
   "keywords": [
     "Login",
@@ -57,6 +67,7 @@
     "@types/supertest": "^2.0.12",
     "chai": "^4.3.6",
     "dotenv": "^16.0.0",
+    "husky": "^8.0.1",
     "jest": "^28.1.0",
     "supertest": "^6.2.3",
     "ts-jest": "^28.0.4",
