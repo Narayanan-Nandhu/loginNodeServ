@@ -14,7 +14,6 @@ const UserSchema =  new Schema({
     profileImage: {
         type: 'String',
     },
-
     Gender: {
         type: 'String'
     }
