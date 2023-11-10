@@ -1,6 +1,6 @@
 {
   "name": "loginnodeserv",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Login node module service layer to handle Passport authentication",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
