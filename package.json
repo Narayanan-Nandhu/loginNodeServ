@@ -1,6 +1,6 @@
 {
   "name": "loginnodeserv",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Login node module service layer to handle Passport authentication",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,7 @@
     "dev": "cross-env NODE_ENV=test PORT=5001 npm run start",
     "clean": "del ./*.js, ./*.js.map",
     "prepublishOnly": "\"npm run test\"",
-    "postinstall": "tsc --project tsconfig.json "
+    "postinstall": "node -e \"process.env.NODE_ENV == 'test' && tsc\" ||  PROD VERSION  && process.exit(1) "
   },
   "husky": {
     "hooks": {
