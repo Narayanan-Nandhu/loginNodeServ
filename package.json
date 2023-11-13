@@ -15,7 +15,7 @@
     "dev": "cross-env NODE_ENV=test PORT=5001 npm run start",
     "clean": "del ./*.js, ./*.js.map",
     "prepublishOnly": "\"npm run test\"",
-    "postinstall": "tsc"
+    "postinstall": "tsc --project tsconfig.json "
   },
   "husky": {
     "hooks": {
