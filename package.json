@@ -14,8 +14,8 @@
     "start": "nodemon node dist/index.js",
     "dev": "cross-env NODE_ENV=test PORT=5001 npm run start",
     "clean": "del ./*.js, ./*.js.map",
-    "prepublishOnly": "\"npm run test\"",
-    "postinstall": "node -e \"process.env.NODE_ENV == 'test' && tsc\" ||  PROD VERSION  && process.exit(1) "
+    "prepublishOnly": "tsc && npm run test",
+    "build": "tsc"
   },
   "husky": {
     "hooks": {
