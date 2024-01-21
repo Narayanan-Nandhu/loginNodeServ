@@ -15,11 +15,11 @@ const app = express()
 const PORT = process.env.PORT || 5001
 let randomKey = Utils.alphaNumericString(13);
 const ENV = process.env.NODE_ENV;
-const USERDB = ENV === CONSTANTS.TESTPACKAGE ? CONSTANTS.TESTPACKAGE_USER : CONSTANTS.PRODUCTION_USER;
 
 type APP_CONFIG = {
     PASSPORT_LOCAL_AUTHENTICATION?: Boolean,
     GOOGLE_AUTHENTICATION?: Boolean,
+    MONGO_DB_NAME: String,
     ROUTES_ENDPOINTS?: {
         PASSPORT_LOCAL?: {
             SIGN_UP?: String,
@@ -44,12 +44,15 @@ type APP_CONFIG = {
 
 let DEFAULT_APP_CONFIG = { ...CONSTANTS.DEFAULT_APP_CONFIG }
 
-export const authenticateServ = (app: Application, CUSTOM_APP_CONFIG?: APP_CONFIG  ) => {
+export const authenticateServ = (app: Application, CUSTOM_APP_CONFIG?: APP_CONFIG) => {
 
-    const {PASSPORT_LOCAL_AUTHENTICATION, GOOGLE_AUTHENTICATION } = CUSTOM_APP_CONFIG || DEFAULT_APP_CONFIG;
+    const { PASSPORT_LOCAL_AUTHENTICATION, GOOGLE_AUTHENTICATION } = CUSTOM_APP_CONFIG || DEFAULT_APP_CONFIG;
+
+    const DB_NAME = ENV === CONSTANTS.TESTPACKAGE ? CONSTANTS.TESTPACKAGE_USER : (CUSTOM_APP_CONFIG?.MONGO_DB_NAME) ? CUSTOM_APP_CONFIG?.MONGO_DB_NAME : CONSTANTS.PRODUCTION_USER;
+
     app.set('APP_CONFIG', { ...DEFAULT_APP_CONFIG, ...CUSTOM_APP_CONFIG });
 
-    mongoose.connect(process.env.MONGO_URI + `/${USERDB}`).then(() => {
+    mongoose.connect(process.env.MONGO_URI + `/${DB_NAME}`).then(() => {
         console.info('Connected to Mongo DB');
     }).catch((error) => {
         console.error("Oh no connection error");

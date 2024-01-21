@@ -1,5 +1,5 @@
 
-import express, {  Request, Application } from 'express';
+import express, { Request, Application } from 'express';
 import Passport from 'passport';
 import { User } from "../model";
 import utils from '../utils';
@@ -16,12 +16,19 @@ export const initializeRoutes = (app: any) => {
     GoogleAuthRouter.get(ROUTES_ENDPOINTS.GOOGLE_AUTH.SIGNUP_URI, Passport.authenticate('google', { scope: ['email', 'profile'] }))
 
     GoogleAuthRouter.get(ROUTES_ENDPOINTS.GOOGLE_AUTH.CALLBACK_URI,
-        Passport.authenticate('google', { failureRedirect: ROUTES_ENDPOINTS.GOOGLE_AUTH.LOGOUT_REDIRECT_URI }),
+        Passport.authenticate('google', { failureRedirect: ROUTES_ENDPOINTS.GOOGLE_AUTH.LOGOUT_REDIRECT_URI, successRedirect: ROUTES_ENDPOINTS.GOOGLE_AUTH.GAUTH_SUCCESS }),
         (req: Express.Request, res: any) => {
             console.trace("oauth redirection...")
             res.redirect(ROUTES_ENDPOINTS.GOOGLE_AUTH.GAUTH_SUCCESS)
         }
     );
+
+    GoogleAuthRouter.get(ROUTES_ENDPOINTS.GOOGLE_AUTH.LOGOUT, (req:any, res:any, next) => {
+        req.logout(function (err: any) {
+            if (err) { return next(err); }
+            res.redirect(ROUTES_ENDPOINTS.GOOGLE_AUTH.LOGOUT_REDIRECT_URI);
+        });    
+    });
 
     LocalAuthRouter.post(ROUTES_ENDPOINTS.PASSPORT_LOCAL.SIGN_UP, async (req: any, res: any) => {
         try {
@@ -54,7 +61,7 @@ export const initializeRoutes = (app: any) => {
         }
     });
 
-    AuthenticationRouter.post(ROUTES_ENDPOINTS.PASSPORT_LOCAL.LOGOUT, (req:any, res:any, next) => {
+    AuthenticationRouter.post(ROUTES_ENDPOINTS.PASSPORT_LOCAL.LOGOUT, (req: any, res: any, next) => {
         req.logout(function (err: any) {
             if (err) { return next(err); }
             res.redirect(ROUTES_ENDPOINTS.PASSPORT_LOCAL.LOGOUT_REDIRECT_URI);

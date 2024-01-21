@@ -9,6 +9,7 @@ const CONSTANTS = Object.freeze({
     DEFAULT_APP_CONFIG: {
         PASSPORT_LOCAL_AUTHENTICATION: true,
         GOOGLE_AUTHENTICATION: true,
+        MONGO_DB_NAME: "USERS",
         ROUTES_ENDPOINTS: {
             PASSPORT_LOCAL: {
                 SIGN_UP: '/local/auth/signup',

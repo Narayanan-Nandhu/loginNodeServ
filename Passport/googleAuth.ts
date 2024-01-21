@@ -1,6 +1,6 @@
 import { PassportStatic } from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
-import { User } from '../Model'
+import { User } from '../model'
 
 const googleAuthenticationService = (passport: PassportStatic) => {
 
@@ -25,7 +25,9 @@ const googleAuthenticationService = (passport: PassportStatic) => {
     passport.use(new GoogleStrategy.Strategy({
         clientID: process.env['GOOGLE_CLIENT_ID'] || '',
         clientSecret: process.env['GOOGLE_CLIENT_SECRET'] || '',
-        callbackURL: `/oauth2/redirect/google`
+        callbackURL: `/oauth2/redirect/google`,
+        proxy: true,
+        scope: ['email', 'profile']
     }, async (accessToken, refreshToken, profile: any, done) => {
 
         console.info("AccessToken", refreshToken, profile, accessToken)

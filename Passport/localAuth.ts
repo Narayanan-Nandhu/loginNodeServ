@@ -1,6 +1,6 @@
 import {PassportStatic} from "passport";
 import LocalAuthentication from 'passport-local'
-import { User } from '../Model'
+import { User } from '../model'
 import utils from "../utils";
 
 type user = {
@@ -32,7 +32,6 @@ const localAuthenticationPassportServ = (Passport: PassportStatic) => {
     Passport.use(new LocalAuthentication.Strategy({usernameField: "name", passwordField: 'password'}, async function (username, password, done) {
         try {
             const [ user ] = await User.find({name: username});
-            console.info("Created a New User ..", user);
 
             if (!user) {
                 return done(null, false, { message: 'Incorrect username.' });
