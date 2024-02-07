@@ -10,6 +10,7 @@ const CONSTANTS = Object.freeze({
         PASSPORT_LOCAL_AUTHENTICATION: true,
         GOOGLE_AUTHENTICATION: true,
         MONGO_DB_NAME: "USERS",
+        SESSIONOUT_TIMING:  2 * 60 * 1000,
         ROUTES_ENDPOINTS: {
             PASSPORT_LOCAL: {
                 SIGN_UP: '/local/auth/signup',
@@ -17,16 +18,16 @@ const CONSTANTS = Object.freeze({
                 SIGN_IN_FAILED: '/local/auth/failed',
                 SIGN_UP_SUCCESS: '/local/auth/success',
                 SIGN_UP_FAILED: '/local/auth/failed',
-                LOGOUT: '/api/logout',
-                GET_USER: '/api/current_user',
+                LOGOUT: '/api/localauth/logout',
+                GET_USER: '/api/localauth/current_user',
                 LOGOUT_REDIRECT_URI: '/home'
             },
             GOOGLE_AUTH: {
                 SIGNUP_URI: '/auth/google',
                 CALLBACK_URI: '/oauth2/redirect/google',
                 GAUTH_SUCCESS: 'gauth/success',
-                LOGOUT: 'api/logout',
-                GET_USER: 'api/current_user',
+                LOGOUT: '/api/gauth/logout',
+                GET_USER: '/api/gauth/current_user',
                 LOGOUT_REDIRECT_URI: '/home'
             }
         }

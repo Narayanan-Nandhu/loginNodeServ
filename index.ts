@@ -2,7 +2,7 @@ import express, { Application } from "express";
 import mongoose from "mongoose";
 import passport from "passport";
 import googleAuthenticationService from './passport/googleAuth';
-import { AuthenticationRouter, GoogleAuthRouter, LocalAuthRouter, initializeRoutes } from './routes/authRouter';
+import { GoogleAuthRouter, LocalAuthRouter, initializeRoutes } from './routes/authRouter';
 import session from 'express-session';
 import Utils from './utils/index'
 import CONSTANTS from "./utils/constants";
@@ -20,6 +20,7 @@ type APP_CONFIG = {
     PASSPORT_LOCAL_AUTHENTICATION?: Boolean,
     GOOGLE_AUTHENTICATION?: Boolean,
     MONGO_DB_NAME: String,
+    SESSIONOUT_TIMING?: number,
     ROUTES_ENDPOINTS?: {
         PASSPORT_LOCAL?: {
             SIGN_UP?: String,
@@ -46,18 +47,19 @@ let DEFAULT_APP_CONFIG = { ...CONSTANTS.DEFAULT_APP_CONFIG }
 
 export const authenticateServ = (app: Application, CUSTOM_APP_CONFIG?: APP_CONFIG) => {
 
-    const { PASSPORT_LOCAL_AUTHENTICATION, GOOGLE_AUTHENTICATION } = CUSTOM_APP_CONFIG || DEFAULT_APP_CONFIG;
+    const { PASSPORT_LOCAL_AUTHENTICATION, GOOGLE_AUTHENTICATION, SESSIONOUT_TIMING } = CUSTOM_APP_CONFIG || DEFAULT_APP_CONFIG;
 
     const DB_NAME = ENV === CONSTANTS.TESTPACKAGE ? CONSTANTS.TESTPACKAGE_USER : (CUSTOM_APP_CONFIG?.MONGO_DB_NAME) ? CUSTOM_APP_CONFIG?.MONGO_DB_NAME : CONSTANTS.PRODUCTION_USER;
 
     app.set('APP_CONFIG', { ...DEFAULT_APP_CONFIG, ...CUSTOM_APP_CONFIG });
-
-    mongoose.connect(process.env.MONGO_URI + `/${DB_NAME}`).then(() => {
+    const MONGODB_URI = process.env.NODE_ENV==='PRODUCTION' ? process.env.MONGO_PROD_URI : process.env.MONGO_URI;
+    const sessionOutTimer = SESSIONOUT_TIMING
+    mongoose.connect(MONGODB_URI + `/${DB_NAME}`).then(() => {
         console.info('Connected to Mongo DB');
     }).catch((error) => {
         console.error("Oh no connection error");
         console.error(error);
-    })
+    });
 
     initializeRoutes(app);
     GOOGLE_AUTHENTICATION && googleAuthenticationService(passport);
@@ -69,14 +71,14 @@ export const authenticateServ = (app: Application, CUSTOM_APP_CONFIG?: APP_CONFI
         secret: randomKey,
         resave: false,
         saveUninitialized: true,
-        cookie: { maxAge: 2 * 60 * 1000 } // 2 minutes
+        cookie: { maxAge: sessionOutTimer } // Default to 2 minutes
     }))
 
     app.use(passport.initialize());
     app.use(passport.session());
     GOOGLE_AUTHENTICATION && app.use(GoogleAuthRouter)
-    PASSPORT_LOCAL_AUTHENTICATION && app.use(AuthenticationRouter)
-    app.use(LocalAuthRouter)
+    PASSPORT_LOCAL_AUTHENTICATION && app.use(LocalAuthRouter)
+
 }
 
 if (process.env.NODE_ENV === CONSTANTS.TESTPACKAGE) {

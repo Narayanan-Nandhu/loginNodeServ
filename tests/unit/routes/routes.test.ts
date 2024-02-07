@@ -5,7 +5,7 @@ import utils from "../../../utils";
 import Request from 'supertest';
 import mongoose from "mongoose";
 import CONSTANTS from '../../../utils/constants';
-import { User } from '../../../Model';
+import { User } from '../../../model';
 import passport from 'passport';
 
 
@@ -22,7 +22,7 @@ describe('Should test the Authentication Routes', () => {
     });
 
     afterAll(async () => {
-        await mongoose.disconnect()
+        await mongoose.disconnect();
     })
 
    describe('Testing the Passport local authentication routes', () => {
@@ -90,6 +90,6 @@ describe('Should test the Authentication Routes', () => {
             const { body, status } = await Request(app).post(Routes.PASSPORT_LOCAL.LOGOUT);
             expect(body).toStrictEqual({});
             expect(status).toBe(302);
-        })
-    })
+        });
+    });
 });

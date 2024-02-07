@@ -3,7 +3,6 @@ import express, { Request, Application } from 'express';
 import Passport from 'passport';
 import { User } from "../model";
 import utils from '../utils';
-export const AuthenticationRouter = express.Router();
 export const GoogleAuthRouter = express.Router();
 export const LocalAuthRouter = express.Router();
 
@@ -30,6 +29,12 @@ export const initializeRoutes = (app: any) => {
         });    
     });
 
+    GoogleAuthRouter.get(ROUTES_ENDPOINTS.GOOGLE_AUTH.GET_USER, (req, res: any) => {
+         if (req?.user) {
+            res.status(200).json(req?.user);
+        }
+    });
+
     LocalAuthRouter.post(ROUTES_ENDPOINTS.PASSPORT_LOCAL.SIGN_UP, async (req: any, res: any) => {
         try {
             const encPass = await utils.encrypt(req.body.password);
@@ -53,7 +58,7 @@ export const initializeRoutes = (app: any) => {
             res.status(200).send(req.user)
         });
 
-    AuthenticationRouter.get(ROUTES_ENDPOINTS.PASSPORT_LOCAL.GET_USER || ROUTES_ENDPOINTS.GOOGLE_AUTH.GET_USER, (req, res: any) => {
+        LocalAuthRouter.get(ROUTES_ENDPOINTS.PASSPORT_LOCAL.GET_USER, (req, res: any) => {
         if (req?.user) {
             res.status(200).json(req?.user);
         } else {
@@ -61,7 +66,7 @@ export const initializeRoutes = (app: any) => {
         }
     });
 
-    AuthenticationRouter.post(ROUTES_ENDPOINTS.PASSPORT_LOCAL.LOGOUT, (req: any, res: any, next) => {
+    LocalAuthRouter.post(ROUTES_ENDPOINTS.PASSPORT_LOCAL.LOGOUT, (req: any, res: any, next) => {
         req.logout(function (err: any) {
             if (err) { return next(err); }
             res.redirect(ROUTES_ENDPOINTS.PASSPORT_LOCAL.LOGOUT_REDIRECT_URI);
